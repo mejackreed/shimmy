@@ -1,8 +1,10 @@
 # Shimmy
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/shimmy`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Shimmy is a Ruby gem designed to help you build shims to provide compliance
+with the [IIIF Presentation API](http://iiif.io/api/presentation/2.0/) for
+sets of images. In particular, it's designed to make it so you can quickly
+build manifests if you have a way to expose existing images to an
+[IIIF Image API](http://iiif.io/api/image/2.0/)-compliant image server.
 
 ## Installation
 
@@ -22,7 +24,43 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Implemented shims should inherit from `Shimmy::Shims::BaseShim` or 
+`Shimmy::Shims::BaseHttpShim`, and at a minimum should implement the
+`#initialize` and `#to_iiif` methods.
+
+Example shims can be found in `lib/shimmy/shims`. 
+
+## Example (Flickr sets)
+
+Start up `pry`: 
+
+```bash
+$ pry --gem
+```
+
+Add in your Flickr API credentials ... 
+
+```ruby
+[1] pry(main)> FlickRaw.api_key = 'a1b2c3d4e5f6API_KEY'
+=> "a1b2c3d4e5f6API_KEY"
+[2] pry(main)> FlickRaw.shared_secret = 'f9e8d7c6b5a4SHARED_SECRET'
+=> "f9e8d7c6b5a4SHARED_SECRET"
+
+```
+
+Pick a Flickr set and generate a manifest:
+
+```
+[3] pry(main)> manifest = Shimmy::Shims::FlickrSet.new(set_id: 72157626120220831)
+=> #<Shimmy::Shims::FlickrSet:0x007fc03dbfa130
+ @set_id=72157626120220831,
+ @set_metadata=
+  {"id"=>"72157626120220831", "owner"=>"35740357@N03", "username"=>"The U.S. National Archives", ...}, 
+ @set_photos=
+  {"id"=>"72157626120220831", "primary"=>"4546092598", "owner"=>"35740357@N03", "ownername"=>"The U.S. National Archives", ...}>
+[4] pry(main)> File.write('manifest.json', manifest.to_iiif(manifest_uri: 'http://foo/bar'))
+=> 70407
+```
 
 ## Development
 
@@ -32,5 +70,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/shimmy.
+Bug reports and pull requests are welcome on GitHub at https://github.com/mejackreed/shimmy.
 
+## License
+
+This software is released under a public domain waiver (Unlicense).
