@@ -21,6 +21,10 @@ module Shimmy
       parse_response
     end
 
+    def profile
+      'http://iiif.io/api/image/2/level2.json'
+    end
+
     private
 
     def parse_response
