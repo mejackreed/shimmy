@@ -1,10 +1,15 @@
 require 'hurley'
+require 'github_api'
+
 
 module Shimmy
   module Shims
     class BaseShim
-
-      def initialize
+      include Shimmy::Gistify
+      attr_reader :gist
+      def initialize(params)
+        @params = params
+        gistify if params[:gistify] == true
       end
 
       ##

@@ -8,7 +8,12 @@ module Shimmy
     class JscImageCollection < BaseHttpShim
       attr_accessor :ng
       def initialize
-        @ng = Nokogiri::HTML(Hurley.get(base_url, params).body)
+        @ng = Nokogiri::HTML(response.body)
+        gistify
+      end
+
+      def response
+        Hurley.get(base_url, params)
       end
 
       def base_url
