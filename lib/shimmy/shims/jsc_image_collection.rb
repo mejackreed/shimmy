@@ -8,31 +8,30 @@ module Shimmy
     module JscImageCollection
       class Parser
         attr_accessor :ng
-        def initialize(url = 'http://images.jsc.nasa.gov/search/search.cgi?searchpage=true&selections=AS8&browsepage=Go&hitsperpage=5&hitsperpage1=100&submit.x=0&submit.y=0&submit=submit')
-          @ng = Nokogiri::HTML(Hurley.get(url).body)
+        def initialize
+          @ng = Nokogiri::HTML(Hurley.get(base_url, params).body)
         end
 
-        def odd_rows
-          @ng.css('tr[bgcolor="#CECFCE"]')
+        def base_url
+          'http://images.jsc.nasa.gov/search/search.cgi'
         end
 
-        def even_rows
-          @ng.css('tr[bgcolor="#DDDEDA"]')
-        end
-
-        def parse
-          object_array = odd_rows.map { |row| RowParser.new(row) }
-
-          even_rows.each_with_index do |row, index|
-            object_array.insert((index + 1), RowParser.new(row))
-          end
-          object_array
+        def params
+          {
+            searchpage: true,
+            selections: 'AS13',
+            browsepage: 'Go',
+            hitsperpage: 200,
+            'submit.x' => 0,
+            'submit.y' => 0,
+            submit: 'submit'
+          }
         end
 
         def to_iiif
           manifest = IIIF::Presentation::Manifest.new(
             '@id' => 'yolo',
-            'label' => 'Apollo VIII'
+            'label' => 'Apollo XIII'
           )
 
           sequence = IIIF::Presentation::Sequence.new
@@ -51,6 +50,25 @@ module Shimmy
           end
           manifest.sequences << sequence
           manifest.to_json(pretty: true)
+        end
+
+        private
+
+        def odd_rows
+          @ng.css('tr[bgcolor="#CECFCE"]')
+        end
+
+        def even_rows
+          @ng.css('tr[bgcolor="#DDDEDA"]')
+        end
+
+        def parse
+          object_array = odd_rows.map { |row| RowParser.new(row) }
+
+          even_rows.each_with_index do |row, index|
+            object_array.insert((index + 1), RowParser.new(row))
+          end
+          object_array
         end
       end
 
@@ -74,7 +92,7 @@ module Shimmy
         end
 
         def image_requestor
-          Shimmy::ImageRequestor.new(static_image)
+          ImageRequestor.new(static_image)
         end
 
         def image_url
