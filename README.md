@@ -62,6 +62,20 @@ Pick a Flickr set and generate a manifest:
 => 70407
 ```
 
+## Publishing your manifest
+
+You can quickly publish manifests that are created by using the Githubify or JsonBlob mixins.
+
+### Example
+1. Create an instance of your shim `s = Shimmy::Shims::JscImageCollection.new`
+1. Call `update_blob` on your shim
+
+```
+> s = Shimmy::Shims::JscImageCollection.new
+> s.update_blog
+=> "https://jsonblob.com/api/jsonBlob/560d3e36e4b01190df3a3ad7"
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake false` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

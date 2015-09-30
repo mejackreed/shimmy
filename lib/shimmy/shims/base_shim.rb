@@ -1,11 +1,12 @@
 require 'hurley'
 require 'github_api'
-
+require 'shimmy/json_blob'
 
 module Shimmy
   module Shims
     class BaseShim
       include Shimmy::Gistify
+      include Shimmy::JsonBlob
       attr_reader :gist
       def initialize(params)
         @params = params

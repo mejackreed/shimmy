@@ -9,7 +9,6 @@ module Shimmy
       attr_accessor :ng
       def initialize
         @ng = Nokogiri::HTML(response.body)
-        gistify
       end
 
       def response
@@ -32,9 +31,9 @@ module Shimmy
         }
       end
 
-      def to_iiif(manifest_uri: 'yolo')
+      def to_iiif(manifest_uri)
         manifest = IIIF::Presentation::Manifest.new(
-          '@id' => :manifest_uri,
+          '@id' => manifest_uri,
           'label' => 'Apollo XIII'
         )
 
