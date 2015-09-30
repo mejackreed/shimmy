@@ -27,7 +27,7 @@ module Shimmy
         }
       end
 
-      def to_iiif(:manifest_uri = 'yolo')
+      def to_iiif(manifest_uri: 'yolo')
         manifest = IIIF::Presentation::Manifest.new(
           '@id' => :manifest_uri,
           'label' => 'Apollo XIII'
