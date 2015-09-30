@@ -1,19 +1,10 @@
 require 'hurley'
 
 module Shimmy
-  module Shimmy
+  module Shims
     class BaseShim
 
       def initialize
-        Hurley.get(base_url, params)
-      end
-
-      def base_url
-        'http://www.example.com'
-      end
-
-      def params
-        {}
       end
 
       ##
