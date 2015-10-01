@@ -48,7 +48,7 @@ module Shimmy
           iiifified = Shimmy::ImageRequestor.new(result_row.image_url)
           canvas.width = iiifified.width.to_i
           canvas.height = iiifified.height.to_i
-          canvas.label = result_row.title
+          canvas.label = "National Archives Search - #{result_row.title}"
           canvas['@id'] = iiifified.service_url
           anno = IIIF::Presentation::Annotation.new()
           ic = IIIF::Presentation::ImageResource.create_image_api_image_resource(
