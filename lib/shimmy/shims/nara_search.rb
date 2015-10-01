@@ -44,18 +44,15 @@ module Shimmy
 
         parsed_response.each do |result|
           canvas = IIIF::Presentation::Canvas.new
-          puts result['objects']['object']['file']['@url']
-          puts result['description']['item']['title']
-          iiifified = Shimmy::ImageRequestor.new(result['objects']['object']['file']['@url'])
-          puts iiifified.service_url
-          puts iiifified.profile
+          result_row = ResultRow.new(result)
+          iiifified = Shimmy::ImageRequestor.new(result_row.image_url)
           canvas.width = iiifified.width.to_i
           canvas.height = iiifified.height.to_i
-          canvas.label = result['description']['item']['title']
+          canvas.label = result_row.title
           canvas['@id'] = iiifified.service_url
           anno = IIIF::Presentation::Annotation.new()
           ic = IIIF::Presentation::ImageResource.create_image_api_image_resource(
-            resource_id: result['objects']['object']['file']['@url'],
+            resource_id: result_row.image_url,
             service_id: iiifified.service_url,
             width: iiifified.width.to_i,
             height: iiifified.height.to_i,
@@ -67,6 +64,26 @@ module Shimmy
         end
         manifest.sequences << sequence
         manifest.to_json(pretty: true)
+      end
+      ##
+      # Easy access to row's info
+      class ResultRow
+        attr_reader :result
+        def initialize(result)
+          @result = result
+        end
+
+        def image_url
+          if @result['objects']['object'].class == Array
+            @result['objects']['object'][0]['file']['@url']
+          else
+            @result['objects']['object']['file']['@url']
+          end
+        end
+
+        def title
+          @result['description']['item']['title']
+        end
       end
     end
   end
