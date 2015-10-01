@@ -37,7 +37,13 @@ module Shimmy
           canvas.label = photo.title
           canvas['@id'] = Shimmy::ImageRequestor.new(photo.url_o).iiifify
           anno = IIIF::Presentation::Annotation.new()
-          ic = IIIF::Presentation::ImageResource.create_image_api_image_resource(resource_id: photo.url_o, service_id: Shimmy::ImageRequestor.new(photo.url_o).iiifify)
+          iiifified = Shimmy::ImageRequestor.new(photo.url_o)
+          ic = IIIF::Presentation::ImageResource.create_image_api_image_resource(
+            resource_id: photo.url_o,
+            service_id: iiifified.service_url,
+            width: iiifified.width,
+            height: iiifified.height
+          )
           anno.resource = ic
           canvas.images << anno
           sequence.canvases << canvas
