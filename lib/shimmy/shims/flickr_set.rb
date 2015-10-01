@@ -22,9 +22,9 @@ module Shimmy
         )
       end
 
-      def to_iiif(manifest_uri: nil)
+      def to_iiif(manifest_uri)
         manifest = IIIF::Presentation::Manifest.new(
-          '@id' => :manifest_uri,
+          '@id' => manifest_uri,
           'label' => @set_metadata.title
         )
 
