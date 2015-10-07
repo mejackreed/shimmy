@@ -11,21 +11,25 @@ module Shimmy
     # A shim for Flickr sets
     class FlickrSet < BaseShim
 
-      attr_accessor :set_id, :set_metadata, :set_photos
+      attr_accessor :set_id, :set_metadata, :set_photos, :licenses
 
       def initialize(set_id: 72157652638432993)
         @set_id = set_id
         @set_metadata = flickr.photosets.getInfo(photoset_id: @set_id)
         @set_photos = flickr.photosets.getPhotos(
           photoset_id: @set_id,
-          extras: 'o_dims, url_o'
+          extras: 'o_dims, url_o, license, machine_tags'
         )
+        @licenses = flickr.photos.licenses.getInfo
       end
 
       def to_iiif(manifest_uri)
         manifest = IIIF::Presentation::Manifest.new(
           '@id' => manifest_uri,
-          'label' => @set_metadata.title
+          'label' => @set_metadata.title,
+          'attribution' => @set_metadata.username,
+          'description' => @set_metadata.description,
+          'related' => FlickRaw.url_photoset(@set_metadata)
         )
 
         sequence = IIIF::Presentation::Sequence.new
