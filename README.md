@@ -24,21 +24,21 @@ Or install it yourself as:
 
 ## Usage
 
-Implemented shims should inherit from `Shimmy::Shims::BaseShim` or 
+Implemented shims should inherit from `Shimmy::Shims::BaseShim` or
 `Shimmy::Shims::BaseHttpShim`, and at a minimum should implement the
 `#initialize` and `#to_iiif` methods.
 
-Example shims can be found in `lib/shimmy/shims`. 
+Example shims can be found in `lib/shimmy/shims`.
 
 ## Example (Flickr sets)
 
-Start up `pry`: 
+Start up `pry`:
 
 ```bash
 $ pry --gem
 ```
 
-Add in your Flickr API credentials ... 
+Add in your Flickr API credentials ...
 
 ```ruby
 [1] pry(main)> FlickRaw.api_key = 'a1b2c3d4e5f6API_KEY'
@@ -55,7 +55,7 @@ Pick a Flickr set and generate a manifest:
 => #<Shimmy::Shims::FlickrSet:0x007fc03dbfa130
  @set_id=72157626120220831,
  @set_metadata=
-  {"id"=>"72157626120220831", "owner"=>"35740357@N03", "username"=>"The U.S. National Archives", ...}, 
+  {"id"=>"72157626120220831", "owner"=>"35740357@N03", "username"=>"The U.S. National Archives", ...},
  @set_photos=
   {"id"=>"72157626120220831", "primary"=>"4546092598", "owner"=>"35740357@N03", "ownername"=>"The U.S. National Archives", ...}>
 [4] pry(main)> File.write('manifest.json', manifest.to_iiif(manifest_uri: 'http://foo/bar'))
@@ -72,7 +72,7 @@ You can quickly publish manifests that are created by using the Githubify or Jso
 
 ```
 > s = Shimmy::Shims::JscImageCollection.new
-> s.update_blog
+> s.update_blob
 => "https://jsonblob.com/api/jsonBlob/560d3e36e4b01190df3a3ad7"
 ```
 
