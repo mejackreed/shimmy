@@ -21,7 +21,7 @@ module Shimmy
     end
 
     def profile
-      @repsonse['profile'][0]
+      @response['profile'][0]
     end
 
     def width
